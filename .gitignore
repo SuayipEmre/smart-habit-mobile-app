@@ -1,23 +1,99 @@
+# ───────────────────────────────
+# 🧩 Node & Package Management
+# ───────────────────────────────
 node_modules/
+package-lock.json
+yarn.lock
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 .expo/
+
+# ───────────────────────────────
+# ⚙️ Build & Output
+# ───────────────────────────────
+build/
 dist/
-npm-debug.*
+tmp/
+temp/
+out/
+coverage/
+*.log
+
+# ───────────────────────────────
+# 📱 Android
+# ───────────────────────────────
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+android/app/release/
+*.iml
+.gradle/
+.idea/
+captures/
+
+# Keystore & signing files (never commit these!)
+*.keystore
 *.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
-web-build/
+key.properties
 
+# ───────────────────────────────
+# 🍏 iOS
+# ───────────────────────────────
+ios/Pods/
+ios/build/
+ios/DerivedData/
+*.xcworkspace
+*.xcuserstate
+*.xcuserdatad/
+*.xcuserdata
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
 
+# ───────────────────────────────
+# 🧠 React Native & Metro Bundler
+# ───────────────────────────────
+.expo/
+.expo-shared/
+.expo-dev-client/
+.bundle/
+*.jsbundle
+*.map
+*.hprof
 
+# ───────────────────────────────
+# 💾 Environment / Secrets
+# ───────────────────────────────
+.env
+.env.*
+!.env.example
 
-ios
-android
+# ───────────────────────────────
+# 🧪 Test / Coverage
+# ───────────────────────────────
+coverage/
+jest-cache/
+jest-test-results.json
+test-results.xml
 
-# macOS
+# ───────────────────────────────
+# 💻 macOS / Windows / IDE Files
+# ───────────────────────────────
 .DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# Temporary files created by Metro to check the health of the file watcher
-.metro-health-check*
+# ───────────────────────────────
+# 🧰 TypeScript / Babel / Lint
+# ───────────────────────────────
+*.tsbuildinfo
+babel.config.js
+metro.config.js
+eslintcache
