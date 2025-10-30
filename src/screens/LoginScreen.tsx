@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import WelcomeHeader from '@/components/WelcomeHeader'
@@ -8,6 +8,8 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useSendSigninRequestMutation } from '@/services/AuthService'
 import { setUserSession } from '@/store/features/user/actions'
 import { UserSessionType } from '@/types/UserSessionType'
+import { saveUserSessionToStorage } from '@/utils/asyncStorage/userSessions'
+
 const LoginScreen = () => {
     const placeholderEmail = "Email"
     const placeholderPassword = "Password"
@@ -25,17 +27,19 @@ const LoginScreen = () => {
 
         const data  = await sendLoginRequest({ email, password })
         console.log('Login response data:', data);
-
-
        
 
-        if (data.error) { }
+        if (data.error) {
+            console.log('Login error:', data.error);
+            Alert.alert('Login Failed', 'Please check your credentials and try again.')
+         }
         else {
             const userValues = {
                 ...data.data.user,
                 token : data.data.token
             } as UserSessionType
             setUserSession(userValues)
+            await saveUserSessionToStorage(userValues)
         }
 
 

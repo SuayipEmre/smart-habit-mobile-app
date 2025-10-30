@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 
 type initialStateType = {
-    userSession: UserSessionType | null
+    userSession: UserSessionType | null | undefined
 }
 const initialState : initialStateType = {
     userSession : null 
@@ -13,7 +13,7 @@ const UserSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        _setUserSession: (state, action : PayloadAction<UserSessionType | null>) => {
+        _setUserSession: (state, action : PayloadAction<UserSessionType | null | undefined>) => {
             state.userSession = action.payload;
         },
         _clearUserSession: (state) => {
