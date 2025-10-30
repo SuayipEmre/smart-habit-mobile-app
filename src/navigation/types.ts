@@ -8,5 +8,6 @@ export type ProfileNavigatorStackParamList = {
 }
 export type AuthNavigatorStackParamList = {
     WelcomeScreen: undefined,
-    LoginScreen : undefined
+    LoginScreen : undefined,
+    SignupScreen : undefined
 }

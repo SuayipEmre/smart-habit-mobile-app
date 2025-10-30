@@ -20,9 +20,20 @@ const AuthService = createApi({
                 }
             }
         }),
+
+        sendSignupRequest : builder.mutation({
+            query : (body) => {
+                return {
+                    url : 'signup',
+                    method : 'POST',
+                    body,
+                }
+            }
+        })
     })
 })
 export const {
-    useSendSigninRequestMutation
+    useSendSigninRequestMutation,
+    useSendSignupRequestMutation
 } = AuthService
 export default AuthService

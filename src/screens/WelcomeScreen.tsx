@@ -12,7 +12,10 @@ const WelcomeScreen = () => {
   const handleNavigate = (process : string) => {
     if(process === 'login'){
       navigation.navigate('LoginScreen')
+      return
     }
+
+    navigation.navigate('SignupScreen')
   }
   return (
     <SafeAreaView className='flex flex-1 bg-white '>

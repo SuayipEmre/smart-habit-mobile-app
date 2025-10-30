@@ -9,6 +9,7 @@ import { useSendSigninRequestMutation } from '@/services/AuthService'
 import { setUserSession } from '@/store/features/user/actions'
 import { UserSessionType } from '@/types/UserSessionType'
 import { saveUserSessionToStorage } from '@/utils/asyncStorage/userSessions'
+import SecureInputWrapper from '@/components/SecureInputWrapper'
 
 const LoginScreen = () => {
     const placeholderEmail = "Email"
@@ -51,10 +52,10 @@ const LoginScreen = () => {
                 <WelcomeHeader />
 
 
-                <View className='w-[90%] items-center justify-center flex-row gap-2'>
+                <TouchableOpacity className='w-[90%] items-center justify-center flex-row gap-2'>
                     <Text className='font-bold text-xl'>Don't have an account yet?</Text>
                     <Text className='text-[#0070FF] font-bold text-xl border-b-[.5px]'>Signup!</Text>
-                </View>
+                </TouchableOpacity>
 
                 <View className='w-[90%] items-center gap-5'>
                     <AuthInput
@@ -64,7 +65,7 @@ const LoginScreen = () => {
                         secureTextEntry={false}
                     />
 
-                    <View className='w-full items-center'>
+                   {/*  <View className='w-full items-center'>
                         {
                             isSecureText ? (
                                 <MaterialCommunityIcons
@@ -87,7 +88,15 @@ const LoginScreen = () => {
                             placeholder={placeholderPassword}
                             secureTextEntry={isSecureText}
                         />
-                    </View>
+                    </View> */}
+                    <SecureInputWrapper isSecureText={isSecureText} setIsSecureText={setIsSecureText}>
+                    <AuthInput
+                            value={password}
+                            onChangeText={setPassword}
+                            placeholder={placeholderPassword}
+                            secureTextEntry={isSecureText}
+                        />
+                    </SecureInputWrapper>
 
                     <View className='w-[90%]  gap-2'>
                         <TouchableOpacity

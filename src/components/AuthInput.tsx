@@ -21,6 +21,7 @@ const AuthInput: React.FC<Props> = ({
             autoCapitalize='none'
             autoCorrect={false}
             selectionColor={'#8F00FF'}
+            secureTextEntry={secureTextEntry}
             className='w-[90%] h-12 border border-[#ccc] rounded-lg text-xl px-4 py-2'
         />
     )

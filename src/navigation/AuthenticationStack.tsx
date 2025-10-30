@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { AuthNavigatorStackParamList } from './types'
 import WelcomeScreen from '@/screens/WelcomeScreen'
 import LoginScreen from '@/screens/LoginScreen'
+import SignupScreen from '@/screens/SignupScreen'
 
 const Stack = createNativeStackNavigator<AuthNavigatorStackParamList>()
 
@@ -20,6 +21,12 @@ const AuthenticationStack = () => {
                 name='LoginScreen'
                 component={LoginScreen}
                 options={{ headerShown: false }}
+            />
+
+            <Stack.Screen
+            name='SignupScreen'
+            component={SignupScreen}
+            options={{ headerShown: false }}
             />
         </Stack.Navigator>
     )
