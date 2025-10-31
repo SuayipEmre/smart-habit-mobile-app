@@ -1,10 +1,15 @@
+import { StatsService } from './../../services/StatsService';
 import { configureStore } from '@reduxjs/toolkit'
 import UserSlice from '../features/user'
 import AuthService from '@/services/AuthService'
+import HabitService from '@/services/HabitService';
+
 export const store = configureStore({
     reducer: {
         userSlice: UserSlice,
         [AuthService.reducerPath]: AuthService.reducer,
+        [StatsService.reducerPath]: StatsService.reducer,
+        [HabitService.reducerPath] : HabitService.reducer
 
 
     },
@@ -12,6 +17,8 @@ export const store = configureStore({
         return (
             getDefaultMiddleware()
                 .concat(AuthService.middleware)
+                .concat(StatsService.middleware)
+                .concat(HabitService.middleware)
             )
     }
 })

@@ -10,6 +10,8 @@ import { setUserSession } from '@/store/features/user/actions'
 import { UserSessionType } from '@/types/UserSessionType'
 import { saveUserSessionToStorage } from '@/utils/asyncStorage/userSessions'
 import SecureInputWrapper from '@/components/SecureInputWrapper'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
+import { AuthNavigatorStackParamList } from '@/navigation/types'
 
 const LoginScreen = () => {
     const placeholderEmail = "Email"
@@ -18,6 +20,8 @@ const LoginScreen = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isSecureText, setIsSecureText] = useState(true)
+
+    const navigation = useNavigation<NavigationProp<AuthNavigatorStackParamList>>()
 
     const [sendLoginRequest, { isError, isLoading }] = useSendSigninRequestMutation()
 
@@ -52,7 +56,10 @@ const LoginScreen = () => {
                 <WelcomeHeader />
 
 
-                <TouchableOpacity className='w-[90%] items-center justify-center flex-row gap-2'>
+                <TouchableOpacity 
+                className='w-[90%] items-center justify-center flex-row gap-2'
+                onPress={() => navigation.navigate('SignupScreen')}
+                >
                     <Text className='font-bold text-xl'>Don't have an account yet?</Text>
                     <Text className='text-[#0070FF] font-bold text-xl border-b-[.5px]'>Signup!</Text>
                 </TouchableOpacity>

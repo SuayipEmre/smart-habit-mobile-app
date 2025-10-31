@@ -7,6 +7,8 @@ import SecureInputWrapper from '@/components/SecureInputWrapper'
 import { useSendSignupRequestMutation } from '@/services/AuthService'
 import { setUserSession } from '@/store/features/user/actions'
 import { saveUserSessionToStorage } from '@/utils/asyncStorage/userSessions'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
+import { AuthNavigatorStackParamList } from '@/navigation/types'
 
 const SignupScreen = () => {
     const [email, setEmail] = useState('')
@@ -15,6 +17,7 @@ const SignupScreen = () => {
     const [username, setUsername] = useState('')
     const [name, setName] = useState('')
 
+    const navigation = useNavigation<NavigationProp<AuthNavigatorStackParamList>>()
     const [sendSignupRequest, { isError, isLoading }] = useSendSignupRequestMutation()
 
     const handleSignup = async () => {
@@ -44,7 +47,10 @@ const SignupScreen = () => {
             <View className='w-[90%] self-center items-center gap-5'>
                 <WelcomeHeader />
 
-                <TouchableOpacity className='w-[90%] items-center justify-center flex-row gap-2'>
+                <TouchableOpacity
+                    className='w-[90%] items-center justify-center flex-row gap-2'
+                    onPress={() => navigation.navigate('LoginScreen')}
+                >
                     <Text className='font-bold text-xl'>Already have an account </Text>
                     <Text className='text-[#0070FF] font-bold text-xl border-b-[.5px]'>Signin!</Text>
                 </TouchableOpacity>
