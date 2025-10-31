@@ -3,6 +3,10 @@ export type MainNavigatorStackParamList = {
     HomeScreen: undefined,
 }
 
+export type HabitsNavigatorStackParamList = {
+    HabitsScreen : undefined
+}
+
 export type ProfileNavigatorStackParamList = {
     ProfileScreen: undefined,
 }

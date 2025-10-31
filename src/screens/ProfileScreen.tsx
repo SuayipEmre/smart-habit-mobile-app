@@ -5,8 +5,6 @@ import { clearUserSessionFromStorage } from '@/utils/asyncStorage/userSessions'
 const ProfileScreen = () => {
     const handleSignOut = async () => {
      const data =    await clearUserSessionFromStorage()
-     console.log('data : ', data);
-     
     }
     return (
         <View>

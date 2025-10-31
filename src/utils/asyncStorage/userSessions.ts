@@ -8,7 +8,6 @@ export const saveUserSessionToStorage = async(userSession : UserSessionType) => 
         await AsyncStorage.setItem('userSession', JSON.stringify(userSession))
         return true
     } catch (error) {
-        console.log('Error saving user session to storage:', error);
         return false
     }
 }
@@ -22,7 +21,6 @@ export const getUserSessionFromStorage = async() => {
             return JSON.parse(userData) as UserSessionType
         }
     } catch (error) {
-        console.log('Error retrieving user session from storage:', error);
         return null
     }
 }
@@ -34,7 +32,6 @@ export const clearUserSessionFromStorage = async() => {
         setUserSession(null)
         return true
     } catch (error) {
-        console.log('Error clearing user session from storage:', error);
         return false
     }
 }

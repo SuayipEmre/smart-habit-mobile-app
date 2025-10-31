@@ -26,16 +26,8 @@ const LoginScreen = () => {
     const [sendLoginRequest, { isError, isLoading }] = useSendSigninRequestMutation()
 
     const handleLogin = async () => {
-        console.log('email : ', email);
-        console.log('password : ', password);
-
-
         const data  = await sendLoginRequest({ email, password })
-        console.log('Login response data:', data);
-       
-
         if (data.error) {
-            console.log('Login error:', data.error);
             Alert.alert('Login Failed', 'Please check your credentials and try again.')
          }
         else {

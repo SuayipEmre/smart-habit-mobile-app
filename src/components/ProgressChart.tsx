@@ -35,7 +35,7 @@ const ProgressChart: React.FC<Props> = ({ data, isLoading, isError }) => {
         label: item.date.slice(5), // "10-28"
         frontColor: "#5B5FEE",
         topLabelComponent: () => (
-            <Text className="text-[11px] text-gray-700">
+            <Text  className="text-[11px] text-gray-700">
                 {item.completed}
             </Text>
         ),

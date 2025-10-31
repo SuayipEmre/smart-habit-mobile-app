@@ -22,10 +22,8 @@ const SignupScreen = () => {
 
     const handleSignup = async () => {
         const { data } = await sendSignupRequest({ name, username, email, password })
-        console.log('data : ', data);
 
         if (data.error) {
-            console.log('Signup error:', data.error);
             Alert.alert('Signup Failed', 'Please check your credentials and try again.')
         }
         else {

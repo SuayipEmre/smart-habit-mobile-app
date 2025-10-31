@@ -6,6 +6,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import ProgressChart from '@/components/ProgressChart';
 import { useGetHabitsOfTodaysQuery } from '@/services/HabitService';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 const HomeScreen = () => {
   const {
     data: streakData,
@@ -29,15 +30,6 @@ const HomeScreen = () => {
   } = useGetHabitsOfTodaysQuery({})
 
   const user = useUserSession()
-  console.log(user);
-
-  useEffect(() => {
-    console.log('data : ', todayHabitData);
-    console.log('isLoading : ', todayHabitLoading);
-    console.log('isError : ', progressIsError);
-    console.log('error : ', todayHabitError);
-
-  }, [todayHabitData, todayHabitLoading, isTodayHabitError])
 
   const renderStreakContent = () => {
     if (streakLoading) return <ActivityIndicator />
@@ -78,8 +70,9 @@ const HomeScreen = () => {
       <>
         {
           data?.map(item => (
-            <View 
-            className="flex-row justify-between items-center bg-[#D0D7F9] rounded-lg shadow-sm px-4 py-3 mb-3">
+            <View
+              key={item?._id}
+              className="flex-row justify-between items-center bg-[#D0D7F9] rounded-lg shadow-sm px-4 py-3 mb-3">
               <View>
                 <Text className="text-base font-semibold text-gray-900">{item.title}</Text>
                 <Text className="text-sm text-gray-500">{item.frequency} • streak {item.streak}</Text>
@@ -95,39 +88,42 @@ const HomeScreen = () => {
     )
   }
   return (
-    <ScrollView className='flex-1 bg-white'>
-      <View className='w-[90%] self-center mt-5 gap-5'>
+    <SafeAreaView className='flex-1 bg-white' edges={['top']}>
 
-        <View className='bg-[#63C271] opacity-90 rounded-xl p-5 gap-2'>
-          <Text className='font-bold text-xl'>Hello, {user.name}</Text>
-          <Text className='font-semibold text-base'>Stay focused on your new habits today!</Text>
-        </View>
+      <ScrollView className='flex-1 bg-white'>
+        <View className='w-[90%] self-center mt-5 gap-5'>
 
-
-        <View className='bg-[#F25D0780] flex-row items-center rounded-xl '>
-          {renderStreakContent()}
-          <Text className='font-bold text-2xl ml-5'>Keep up your streak!</Text>
-        </View>
-
-
-        {renderProgressContent()}
-
-
-        <View className='gap-2'>
-
-          <View className='flex flex-row items-center gap-2'>
-            <MaterialIcons name="calendar-today" size={20} color="black" />
-            <Text className='text-lg font-semibold  text-gray-900'>Today's habits</Text>
+          <View className='bg-[#63C271] opacity-90 rounded-xl p-5 gap-2'>
+            <Text className='font-bold text-xl'>Hello, {user.name}</Text>
+            <Text className='font-semibold text-base'>Stay focused on your new habits today!</Text>
           </View>
 
-          <View>
-            {renderHabitsOfTodayContent()}
+
+          <View className='bg-[#F25D0780] flex-row items-center rounded-xl '>
+            {renderStreakContent()}
+            <Text className='font-bold text-2xl ml-5'>Keep up your streak!</Text>
           </View>
+
+
+          {renderProgressContent()}
+
+
+          <View className='gap-2'>
+
+            <View className='flex flex-row items-center gap-2'>
+              <MaterialIcons name="calendar-today" size={20} color="black" />
+              <Text className='text-lg font-semibold  text-gray-900'>Today's habits</Text>
+            </View>
+
+            <View>
+              {renderHabitsOfTodayContent()}
+            </View>
+          </View>
+
+
         </View>
-
-
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 
