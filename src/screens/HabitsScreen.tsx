@@ -1,7 +1,11 @@
-import { ActivityIndicator, Alert, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect } from 'react'
 import { useCompleteHabitMutation, useGetUserHabitsQuery } from '@/services/HabitService'
 import HabitCard from '@/components/HabitCard'
+import { AntDesign } from '@expo/vector-icons'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
+import { HabitsNavigatorStackParamList } from '@/navigation/types'
+
 
 
 type habits = {
@@ -17,39 +21,28 @@ type habits = {
     updatedAt: string
 }
 const HabitsScreen = () => {
-    const { data, isLoading, isError, error } = useGetUserHabitsQuery({})
+    const { data, isLoading, isError } = useGetUserHabitsQuery({})
 
-    console.log('data : ', data);
-    console.log('isLoading', isLoading);
-    console.log('isError:', isError);
-    console.log('error : ', error);
+    const navigation = useNavigation<NavigationProp<HabitsNavigatorStackParamList>>()
 
     const [sendCompleteHabitRequest, {
         isError: completeHabitError,
         isLoading: completeHabitLoading,
-        data: completeHabitData
+        data: completeHabitData,
+        error
     }] = useCompleteHabitMutation()
 
+    
     const completeHabits = async (habitId: string) => {
         try {
-            const {data} = await sendCompleteHabitRequest(
-                habitId
-            )
-            console.log('complete data : ', data);
-
-            if(data.status == 'success'){
-                Alert.alert('SmartHabit', 'The habit was succesfully completed') 
-            }else{
-                Alert.alert('SmartHabit', 'An error occured while completing the habit')
-            }
-            
-            
-        } catch (error) {
-            console.log('error : ', error);
-            Alert.alert('SmartHabit', 'An error occured while completing the habit')
-            
+          const res = await sendCompleteHabitRequest(habitId).unwrap();
+      
+          Alert.alert("SmartHabit", "The habit was successfully completed");
+        } catch (err: any) {
+          const message = err?.data?.message || "Something went wrong";
+          Alert.alert("SmartHabit", message);
         }
-    }
+      };
 
 
     const renderHabits = () => {
@@ -66,6 +59,8 @@ const HabitsScreen = () => {
                         onComplete={completeHabits}
                     />
                 )}
+                showsVerticalScrollIndicator={false}
+                style={{ width: '90%', alignSelf: 'center' }}
             />
         )
     }
@@ -76,6 +71,12 @@ const HabitsScreen = () => {
     return (
         <View className='flex flex-1 bg-white'>
             {renderHabits()}
+
+            <TouchableOpacity
+                onPress={() => navigation.navigate('CreateHabitScreen')}
+                className='absolute right-5 bottom-10 z-50'>
+                <AntDesign name="plus-circle" size={40} color="black" />
+            </TouchableOpacity>
         </View>
     )
 }

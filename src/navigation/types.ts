@@ -4,7 +4,8 @@ export type MainNavigatorStackParamList = {
 }
 
 export type HabitsNavigatorStackParamList = {
-    HabitsScreen : undefined
+    HabitsScreen : undefined,
+    CreateHabitScreen : undefined
 }
 
 export type ProfileNavigatorStackParamList = {

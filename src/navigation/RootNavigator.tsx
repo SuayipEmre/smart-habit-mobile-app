@@ -73,7 +73,8 @@ const RootNavigator = () => {
                     tabBarIcon : ({focused, color}) => (
                         <AntDesign name="unordered-list" size={24} color={color} />
                     ),
-                    headerTitle : 'Your Habits'
+                    headerTitle : 'Your Habits',
+                    headerShown:false
                 }}
                 />
 
