@@ -75,6 +75,14 @@ export const HabitService = createApi({
       }),
       invalidatesTags: ['Habit'],
     }),
+    
+    deleteHabit: builder.mutation({
+      query: (habitId : string) => ({
+        url: `delete/${habitId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Habit'],
+    }),
   }),
 });
 
@@ -83,7 +91,8 @@ export const {
   useGetHabitsOfTodaysQuery,
   useCompleteHabitMutation,
   useCreateHabitMutation,
-  useUpdateHabitMutation
+  useUpdateHabitMutation,
+  useDeleteHabitMutation
 } = HabitService;
 
 export default HabitService;

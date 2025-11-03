@@ -7,7 +7,7 @@ import { Dimensions } from 'react-native'
 import LogoIcon from '@/assets/LogoIcon'
 import SelectFrequency from '@/components/SelectFrequency'
 import SelectReminderTime from '@/components/SelectReminderTime'
-import { useUpdateHabitMutation } from '@/services/HabitService'
+import { useDeleteHabitMutation, useUpdateHabitMutation } from '@/services/HabitService'
 import { formatTime } from '@/utils/formatTime'
 
 type Props = NativeStackScreenProps<HabitsNavigatorStackParamList, 'HabitDetailScreen'>
@@ -22,8 +22,11 @@ const HabitDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   const [reminderTime, setReminderTime] = useState<Date | null>(null);
   const [showPicker, setShowPicker] = useState(false);
 
-  const [updateHabit, { isLoading, isError }] = useUpdateHabitMutation()
+  const [updateHabit, { isLoading : updateIsLoading, isError : updateIsError }] = useUpdateHabitMutation()
+  const [deleteHabit, { isLoading, isError }] = useDeleteHabitMutation()
 
+
+  
   const handleUpdate = async () => {
     if (!title.trim()) {
       return Alert.alert('Missing Title', 'Please enter a habit title.')
@@ -46,6 +49,44 @@ const HabitDetailScreen: React.FC<Props> = ({ route, navigation }) => {
       Alert.alert('Error', 'Failed to update habit ❌')
     }
   }
+
+  const handleDeleteHabit = async() => {
+    try {
+      await deleteHabit(habit._id).unwrap()
+      Alert.alert('Smart Habit', 'Succesfully deleted the habit')
+      navigation.goBack()
+    } catch (error) {
+      Alert.alert('Smart Habit', 'An error occured while deleting the habit.')
+    }
+  }
+
+
+
+  const showAlert = () => (
+    Alert.alert(
+      'Smart Habit',
+      'The Habit will be deleted!',
+      [
+        {
+          text: 'changed my mind',
+          style: 'default',
+          isPreferred: true
+        },
+
+        {
+          text: 'Delete the habit ',
+          onPress: async() => await handleDeleteHabit(),
+          style: 'destructive',
+        },
+
+      ],
+
+
+    )
+  )
+
+  
+
 
 
   const handleDeleteChanges = () => {
@@ -133,7 +174,7 @@ const HabitDetailScreen: React.FC<Props> = ({ route, navigation }) => {
 
 
         <TouchableOpacity
-          onPress={handleUpdate}
+          onPress={showAlert}
           className={`mt-6 py-3 rounded-xl ${false ? 'bg-gray-400' : 'bg-red-500 active:bg-indigo-600'
             }`}
         >

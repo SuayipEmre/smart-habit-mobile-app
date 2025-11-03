@@ -89,20 +89,22 @@ const CreateHabitScreen = () => {
                         title="Habit Description"
                         isMultiline={true}
                     />
+
+                    <SelectFrequency
+                        frequency={frequency}
+                        setFrequency={setFrequency}
+                    />
+
+                    {/* Reminder Time */}
+                    <SelectReminderTime
+                        reminderTime={reminderTime}
+                        setReminderTime={setReminderTime}
+                        setShowPicker={setShowPicker}
+                        showPicker={showPicker}
+                    />
+
                 </View>
 
-                <SelectFrequency
-                    frequency={frequency}
-                    setFrequency={setFrequency}
-                />
-
-                {/* Reminder Time */}
-                <SelectReminderTime
-                    reminderTime={reminderTime}
-                    setReminderTime={setReminderTime}
-                    setShowPicker={setShowPicker}
-                    showPicker={showPicker}
-                />
 
                 <View className="w-[90%]   self-center mt-5">
                     <TouchableOpacity
