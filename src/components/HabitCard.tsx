@@ -3,8 +3,11 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import { useSharedValue, useAnimatedStyle, withTiming, interpolateColor } from 'react-native-reanimated'
 import Animated from 'react-native-reanimated'
 import * as Haptics from 'expo-haptics'
+import { Entypo } from '@expo/vector-icons'
+import { NavigationProp } from '@react-navigation/native'
+import { HabitsNavigatorStackParamList } from '@/navigation/types'
 
-// tip tanımı (prop olarak alacağız)
+
 type HabitType = {
   _id: string
   title: string
@@ -13,11 +16,12 @@ type HabitType = {
   user: string
   streak: number
   completedDates: string[]
-  reminderTime?: string
-  createdAt: string
-  updatedAt: string
+  reminderTime: string
   isCompletedToday?: boolean
-  onComplete?: (id: string) => void
+  onComplete?: (id: string) => void,
+  createdAt: string,
+  updatedAt: string,
+  navigation : NavigationProp<HabitsNavigatorStackParamList>
 }
 
 const HabitCard: React.FC<HabitType> = ({
@@ -27,11 +31,27 @@ const HabitCard: React.FC<HabitType> = ({
   frequency,
   streak,
   reminderTime,
-  completedDates,
-  isCompletedToday = false,
-  onComplete
+  isCompletedToday,
+  onComplete,
+  createdAt,
+  updatedAt,
+  navigation
 }) => {
-    
+
+  const habit = {
+    _id,
+    title,
+    description,
+    frequency,
+    streak,
+    reminderTime,
+    isCompletedToday,
+    createdAt,
+    updatedAt
+  }
+
+  console.log('habit : ', habit);
+  
   // animasyon state
   const progress = useSharedValue(isCompletedToday ? 1 : 0)
 
@@ -40,7 +60,7 @@ const HabitCard: React.FC<HabitType> = ({
     backgroundColor: interpolateColor(
       progress.value,
       [0, 1],
-      ['#ffffff', '#f3f4f6'] // white → gray-100
+      ['#ffffff', '#f3f4f6'] // 
     ),
   }))
 
@@ -51,20 +71,36 @@ const HabitCard: React.FC<HabitType> = ({
     onComplete?.(_id)
   }
 
+  console.log('is completed habit on card : ', isCompletedToday);
+  
+
+
+  const handleHabitDetail = () => {
+  
+
+    navigation.navigate('HabitDetailScreen', {habit})
+  }
   return (
     <Animated.View
       className="rounded-2xl shadow-sm mb-3 p-4 dark:bg-zinc-900"
       style={cardStyle}
     >
-      {/* Başlık ve açıklama */}
-      <Text className="text-base font-semibold text-gray-900 dark:text-gray-100">
-        {title}
-      </Text>
-      {description ? (
-        <Text className="text-sm text-gray-500 dark:text-gray-400 mt-1" numberOfLines={2}>
-          {description}
-        </Text>
-      ) : null}
+      <TouchableOpacity onPress={handleHabitDetail}>
+        <View className='flex flex-row justify-between'>
+          {/* Başlık ve açıklama */}
+          <Text className="text-base font-semibold text-gray-900 dark:text-gray-100">
+            {
+              title.length > 25 ? title.slice(0, 25) + ' ...' : title
+            }
+          </Text>
+
+        </View>
+        {description ? (
+          <Text className="text-sm text-gray-500 dark:text-gray-400 mt-1" numberOfLines={2}>
+            {description.length > 45 ? description.slice(0, 45) : description}
+          </Text>
+        ) : null}
+      </TouchableOpacity>
 
       {/* Bilgi satırı */}
       <View className="flex-row justify-between items-center mt-3">
@@ -86,16 +122,14 @@ const HabitCard: React.FC<HabitType> = ({
         <TouchableOpacity
           disabled={isCompletedToday}
           onPress={handleComplete}
-          className={`px-4 py-2 rounded-xl ${
-            isCompletedToday
-              ? 'bg-gray-200'
-              : 'bg-indigo-500 active:bg-indigo-600'
-          }`}
+          className={`px-4 py-2 rounded-xl ${isCompletedToday
+            ? 'bg-gray-200'
+            : 'bg-indigo-500 active:bg-indigo-600'
+            }`}
         >
           <Text
-            className={`text-sm font-semibold ${
-              isCompletedToday ? 'text-gray-500' : 'text-white'
-            }`}
+            className={`text-sm font-semibold ${isCompletedToday ? 'text-gray-500' : 'text-white'
+              }`}
           >
             {isCompletedToday ? 'Completed' : 'Complete'}
           </Text>

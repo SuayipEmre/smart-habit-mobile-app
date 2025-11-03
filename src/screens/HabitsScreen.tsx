@@ -23,6 +23,8 @@ type habits = {
 const HabitsScreen = () => {
     const { data, isLoading, isError } = useGetUserHabitsQuery({})
 
+    console.log('HABITS : ', data);
+    
     const navigation = useNavigation<NavigationProp<HabitsNavigatorStackParamList>>()
 
     const [sendCompleteHabitRequest, {
@@ -55,8 +57,8 @@ const HabitsScreen = () => {
                 renderItem={({ item }) => (
                     <HabitCard
                         {...item}
-                        isCompletedToday={false}
                         onComplete={completeHabits}
+                        navigation={navigation}
                     />
                 )}
                 showsVerticalScrollIndicator={false}

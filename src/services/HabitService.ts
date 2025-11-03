@@ -25,7 +25,7 @@ export const HabitService = createApi({
         url: '/',
         method: 'GET',
       }),
-      providesTags: ['Habit'], // ✅ cache’e tag ekler
+      providesTags: ['Habit'],
     }),
 
     // 🟣 Today's habits
@@ -34,7 +34,7 @@ export const HabitService = createApi({
         url: 'today',
         method: 'GET',
       }),
-      providesTags: ['Habit'], // aynı tag
+      providesTags: ['Habit'],
     }),
 
     // 🟠 Habit tamamlama
@@ -53,7 +53,27 @@ export const HabitService = createApi({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Habit'], // ✅ success → liste yeniden çekilir
+      invalidatesTags: ['Habit'],
+    }),
+
+    updateHabit: builder.mutation({
+      query: ({ title, description, frequency, remindertime, habitId }: {
+        title: string,
+        description: string,
+        frequency: string,
+        remindertime: string | null,
+        habitId: string,
+      }) => ({
+        url: `update/${habitId}`,
+        method: 'PUT',
+        body: {
+          title,
+          description,
+          frequency,
+          reminderTime : remindertime
+        }
+      }),
+      invalidatesTags: ['Habit'],
     }),
   }),
 });
@@ -63,6 +83,7 @@ export const {
   useGetHabitsOfTodaysQuery,
   useCompleteHabitMutation,
   useCreateHabitMutation,
+  useUpdateHabitMutation
 } = HabitService;
 
 export default HabitService;

@@ -6,6 +6,17 @@ export type MainNavigatorStackParamList = {
 export type HabitsNavigatorStackParamList = {
     HabitsScreen : undefined,
     CreateHabitScreen : undefined
+    HabitDetailScreen : {habit : {
+        _id : string,
+        title : string,
+        description ?:string,
+        frequency: string,
+        streak : number,
+        reminderTime:  string,
+        isCompletedToday? : boolean,
+        createdAt : string,
+        updatedAt : string
+    }}
 }
 
 export type ProfileNavigatorStackParamList = {
