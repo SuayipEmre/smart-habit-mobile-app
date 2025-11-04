@@ -8,7 +8,7 @@ type Props = {
     showPicker : boolean,
     setShowPicker : (value : boolean) => void,
     reminderTime : Date | null | string,
-    setReminderTime : (value:Date) => void
+    setReminderTime : (value:string) => void
 
 }
 const SelectReminderTime : React.FC<Props> = ({setShowPicker, showPicker, reminderTime, setReminderTime}) => {
@@ -19,7 +19,7 @@ const SelectReminderTime : React.FC<Props> = ({setShowPicker, showPicker, remind
     ) => {
         setShowPicker(false);
         if (selectedDate) {
-            setReminderTime(selectedDate);
+            setReminderTime(selectedDate.toISOString());
         }
     };
 
@@ -35,7 +35,7 @@ const SelectReminderTime : React.FC<Props> = ({setShowPicker, showPicker, remind
             >
                 <Text className="text-gray-700">
                     {reminderTime
-                        ? (reminderTime as Date).toLocaleTimeString([], {
+                        ? (new Date(reminderTime)).toLocaleTimeString([], {
                             hour: "2-digit",
                             minute: "2-digit",
                         })
@@ -45,7 +45,7 @@ const SelectReminderTime : React.FC<Props> = ({setShowPicker, showPicker, remind
 
             {showPicker && (
                 <DateTimePicker
-                    value={(reminderTime as Date) || new Date()}
+                value={reminderTime ? new Date(reminderTime) : new Date()} 
                     mode="time"
                     display={Platform.OS === "ios" ? "spinner" : "default"}
                     onChange={handleTimeChange}

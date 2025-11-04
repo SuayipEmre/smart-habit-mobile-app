@@ -7,6 +7,7 @@ import ProgressChart from '@/components/ProgressChart';
 import { useGetHabitsOfTodaysQuery } from '@/services/HabitService';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import CenteredView from '@/components/layouts/CenteredView';
 const HomeScreen = () => {
   const {
     data: streakData,
@@ -91,10 +92,10 @@ const HomeScreen = () => {
     <SafeAreaView className='flex-1 bg-white' edges={['top']}>
 
       <ScrollView className='flex-1 bg-white'>
-        <View className='w-[90%] self-center mt-5 gap-5'>
+        <CenteredView className='gap-5 mt-5'>
 
           <View className='bg-[#63C271] opacity-90 rounded-xl p-5 gap-2'>
-            <Text className='font-bold text-xl'>Hello, {user.name}</Text>
+            <Text className='font-bold text-xl'>Hello, {user?.name}</Text>
             <Text className='font-semibold text-base'>Stay focused on your new habits today!</Text>
           </View>
 
@@ -121,7 +122,7 @@ const HomeScreen = () => {
           </View>
 
 
-        </View>
+          </CenteredView>
       </ScrollView>
     </SafeAreaView>
   )

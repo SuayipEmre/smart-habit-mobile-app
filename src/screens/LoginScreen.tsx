@@ -42,6 +42,8 @@ const LoginScreen = () => {
 
 
     }
+
+    
     return (
         <SafeAreaView className='flex flex-1 '>
             <View className='w-full h-full items-center gap-10  py-2'>

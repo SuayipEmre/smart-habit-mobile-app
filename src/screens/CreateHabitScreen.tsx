@@ -17,35 +17,28 @@ import { useCreateHabitMutation } from "@/services/HabitService";
 import SelectFrequency from "@/components/SelectFrequency";
 import SelectReminderTime from "@/components/SelectReminderTime";
 import { formatTime } from "@/utils/formatTime";
+import { useHabitDescription, useHabitFrequency, useHabitReminderTime, useHabitShowPicker, useHabitTitle } from "@/store/features/habit/hooks";
+import { setHabitDescription, setHabitFrequency, setHabitReminderTime, setHabitShowPicker, setHabitTitle } from "@/store/features/habit/actions";
+import CenteredView from "@/components/layouts/CenteredView";
 
 const frequencyData = ["daily", "weekly", "monthly"]
 
 const CreateHabitScreen = () => {
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [frequency, setFrequency] = useState("daily");
-    const [reminderTime, setReminderTime] = useState<Date | null>(null);
-    const [showPicker, setShowPicker] = useState(false);
-    const [isSelectFrequency, setIsSelectFrequency] = useState(false)
     const { height } = Dimensions.get("window");
 
     const [sendCreateHabitReq, { isLoading, isError }] = useCreateHabitMutation()
 
-    const handleTimeChange = (
-        event: DateTimePickerEvent,
-        selectedDate?: Date
-    ) => {
-        setShowPicker(false);
-        if (selectedDate) {
-            setReminderTime(selectedDate);
-        }
-    };
+    const title = useHabitTitle()
+    const description = useHabitDescription()
+    const frequency = useHabitFrequency()
+    const reminderTime = useHabitReminderTime()
+    const showPicker = useHabitShowPicker()
 
-
-
-    const handleCreateCommit = async () => {
+    const handleCreateHabit = async () => {
         // Eğer reminderTime seçildiyse stringe çevir
-        const formattedTime = formatTime(reminderTime)
+        const formattedTime = reminderTime
+        ? formatTime(new Date(reminderTime)) // ISO → Date
+        : null;
 
         const values = {
             title,
@@ -58,6 +51,10 @@ const CreateHabitScreen = () => {
 
         try {
             await sendCreateHabitReq(values).unwrap();
+            setHabitTitle("");
+            setHabitDescription("");
+            setHabitFrequency("daily");
+            setHabitReminderTime(null);
             Alert.alert("SmartHabit", "Habit was successfully created");
         } catch (error) {
             console.log("error", error);
@@ -68,12 +65,12 @@ const CreateHabitScreen = () => {
 
     return (
         <View className="flex-1 bg-white">
-            <View className="w-[90%] self-center mt-5">
+            <CenteredView >
                 {/* Title */}
                 <View className="w-[90%] self-center">
                     <HabitInput
                         value={title}
-                        setValue={setTitle}
+                        setValue={setHabitTitle}
                         placeholder="title"
                         height={height}
                         title="Habit Title"
@@ -83,7 +80,7 @@ const CreateHabitScreen = () => {
                     {/* Description */}
                     <HabitInput
                         value={description}
-                        setValue={setDescription}
+                        setValue={setHabitDescription}
                         placeholder="description"
                         height={height}
                         title="Habit Description"
@@ -92,14 +89,14 @@ const CreateHabitScreen = () => {
 
                     <SelectFrequency
                         frequency={frequency}
-                        setFrequency={setFrequency}
+                        setFrequency={setHabitFrequency}
                     />
 
                     {/* Reminder Time */}
                     <SelectReminderTime
                         reminderTime={reminderTime}
-                        setReminderTime={setReminderTime}
-                        setShowPicker={setShowPicker}
+                        setReminderTime={setHabitReminderTime}
+                        setShowPicker={setHabitShowPicker}
                         showPicker={showPicker}
                     />
 
@@ -109,12 +106,12 @@ const CreateHabitScreen = () => {
                 <View className="w-[90%]   self-center mt-5">
                     <TouchableOpacity
                         className="bg-[#5B5FEE] w-1/2 flex py-2 rounded-xl items-center justify-center self-end"
-                        onPress={handleCreateCommit}
+                        onPress={handleCreateHabit}
                     >
                         <Text className="text-white font-bold text-lg">Create Habit</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </CenteredView>
         </View>
     );
 };

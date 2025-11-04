@@ -1,11 +1,12 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import { frequencyType } from '@/types/frequencyType'
 
 const frequencyData = ["daily", "weekly", "monthly"]
 
 type Props = {
     frequency : string,
-    setFrequency : (frequency : string) => void
+    setFrequency : (frequency : frequencyType) => void
 }
 const SelectFrequency : React.FC<Props> = ({frequency, setFrequency}) => {
   return (
@@ -16,7 +17,7 @@ const SelectFrequency : React.FC<Props> = ({frequency, setFrequency}) => {
         {frequencyData.map((item) => (
             <TouchableOpacity
                 key={item}
-                onPress={() => setFrequency(item)}
+                onPress={() => setFrequency(item as frequencyType)}
                 className={`w-[25%] py-2 rounded-md mt-5 items-center justify-center ${frequency === item ? "bg-green-500" : "bg-green-100"
                     }`}
             >

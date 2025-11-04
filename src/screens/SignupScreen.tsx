@@ -9,6 +9,7 @@ import { setUserSession } from '@/store/features/user/actions'
 import { saveUserSessionToStorage } from '@/utils/asyncStorage/userSessions'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { AuthNavigatorStackParamList } from '@/navigation/types'
+import CenteredView from '@/components/layouts/CenteredView'
 
 const SignupScreen = () => {
     const [email, setEmail] = useState('')
@@ -42,7 +43,7 @@ const SignupScreen = () => {
     return (
         <SafeAreaView className='flex flex-1 bg-white'>
 
-            <View className='w-[90%] self-center items-center gap-5'>
+            <CenteredView className='items-center gap-5'>
                 <WelcomeHeader />
 
                 <TouchableOpacity
@@ -93,7 +94,7 @@ const SignupScreen = () => {
                     </TouchableOpacity>
 
                 </View>
-            </View>
+            </CenteredView>
 
         </SafeAreaView>
     )

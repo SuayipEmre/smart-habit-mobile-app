@@ -15,11 +15,10 @@ export const HabitService = createApi({
     },
   }),
 
-  // 🔹 TAG sistemi aktif
   tagTypes: ['Habit'],
 
   endpoints: (builder) => ({
-    // 🟢 Habits list (bu cache’lenir)
+
     getUserHabits: builder.query({
       query: () => ({
         url: '/',
@@ -28,7 +27,6 @@ export const HabitService = createApi({
       providesTags: ['Habit'],
     }),
 
-    // 🟣 Today's habits
     getHabitsOfTodays: builder.query({
       query: () => ({
         url: 'today',
@@ -37,7 +35,6 @@ export const HabitService = createApi({
       providesTags: ['Habit'],
     }),
 
-    // 🟠 Habit tamamlama
     completeHabit: builder.mutation({
       query: (habitId: string) => ({
         url: `complete/${habitId}`,
@@ -46,7 +43,6 @@ export const HabitService = createApi({
       invalidatesTags: ['Habit'], // ✅ success → cache invalidation
     }),
 
-    // 🔵 Habit oluşturma
     createHabit: builder.mutation({
       query: (body) => ({
         url: `create`,
@@ -75,7 +71,7 @@ export const HabitService = createApi({
       }),
       invalidatesTags: ['Habit'],
     }),
-    
+
     deleteHabit: builder.mutation({
       query: (habitId : string) => ({
         url: `delete/${habitId}`,

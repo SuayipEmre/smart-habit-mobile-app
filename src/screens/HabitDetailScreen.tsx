@@ -1,14 +1,17 @@
 import { StyleSheet, Text, View, TouchableOpacity, Alert, Image, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { HabitsNavigatorStackParamList } from '@/navigation/types'
 import HabitInput from '@/components/HabitInput'
 import { Dimensions } from 'react-native'
-import LogoIcon from '@/assets/LogoIcon'
 import SelectFrequency from '@/components/SelectFrequency'
 import SelectReminderTime from '@/components/SelectReminderTime'
 import { useDeleteHabitMutation, useUpdateHabitMutation } from '@/services/HabitService'
 import { formatTime } from '@/utils/formatTime'
+import { useHabitDescription, useHabitFrequency, useHabitReminderTime, useHabitShowPicker, useHabitTitle } from '@/store/features/habit/hooks'
+import { setHabitDescription, setHabitFrequency, setHabitReminderTime, setHabitShowPicker, setHabitTitle } from '@/store/features/habit/actions'
+import { frequencyType } from '@/types/frequencyType'
+import CenteredView from '@/components/layouts/CenteredView'
 
 type Props = NativeStackScreenProps<HabitsNavigatorStackParamList, 'HabitDetailScreen'>
 
@@ -16,27 +19,36 @@ const { height } = Dimensions.get('window')
 
 const HabitDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   const { habit } = route.params
-  const [title, setTitle] = useState(habit.title)
-  const [desc, setDesc] = useState(habit.description || '')
-  const [frequency, setFrequency] = useState(habit.frequency)
-  const [reminderTime, setReminderTime] = useState<Date | null>(null);
-  const [showPicker, setShowPicker] = useState(false);
 
   const [updateHabit, { isLoading : updateIsLoading, isError : updateIsError }] = useUpdateHabitMutation()
   const [deleteHabit, { isLoading, isError }] = useDeleteHabitMutation()
 
+  const title = useHabitTitle()
+  const description = useHabitDescription()
+  const frequency = useHabitFrequency()
+  const reminderTime = useHabitReminderTime()
+  const showPicker = useHabitShowPicker()
 
+  useEffect(() => {
+    setHabitDescription(habit.description || '')
+    setHabitTitle(habit.title)
+    setHabitFrequency(habit.frequency as frequencyType)
+    setHabitReminderTime(habit.reminderTime || null)
+  },[habit, route, navigation])
   
   const handleUpdate = async () => {
     if (!title.trim()) {
       return Alert.alert('Missing Title', 'Please enter a habit title.')
     }
 
-    const formattedTime = formatTime(reminderTime)
+    const formattedTime = reminderTime
+    ? formatTime(new Date(reminderTime)) // ISO → Date
+    : null;
+
     try {
       await updateHabit({
         title,
-        description: desc,
+        description,
         habitId: habit._id,
         frequency,
         remindertime: formattedTime 
@@ -90,15 +102,15 @@ const HabitDetailScreen: React.FC<Props> = ({ route, navigation }) => {
 
 
   const handleDeleteChanges = () => {
-    setTitle(habit.title)
-    setDesc(habit.description || '')
-    setFrequency(habit.frequency)
-    setReminderTime(null)
+    setHabitTitle(habit.title)
+    setHabitDescription(habit.description || '')
+    setHabitFrequency(habit.frequency as frequencyType)
+    setHabitReminderTime(null)
   }
   return (
     <ScrollView className="flex flex-1 bg-white px-5 py-4">
 
-      <View className='w-[90%] self-center'>
+      <CenteredView>
         <Image
           source={require('../../assets/reading.png')}
           width={200}
@@ -121,7 +133,7 @@ const HabitDetailScreen: React.FC<Props> = ({ route, navigation }) => {
         {/* Title input */}
         <HabitInput
           value={title}
-          setValue={setTitle}
+          setValue={setHabitTitle}
           placeholder="Title"
           height={height}
           title="Habit title"
@@ -130,8 +142,8 @@ const HabitDetailScreen: React.FC<Props> = ({ route, navigation }) => {
 
         {/* Description input */}
         <HabitInput
-          value={desc}
-          setValue={setDesc}
+          value={description}
+          setValue={setHabitDescription}
           placeholder="Description"
           height={height}
           title="Habit description"
@@ -141,13 +153,13 @@ const HabitDetailScreen: React.FC<Props> = ({ route, navigation }) => {
 
         <SelectFrequency
           frequency={frequency}
-          setFrequency={setFrequency}
+          setFrequency={setHabitFrequency}
         />
 
         <SelectReminderTime
           reminderTime={reminderTime}
-          setReminderTime={setReminderTime}
-          setShowPicker={setShowPicker}
+          setReminderTime={setHabitReminderTime}
+          setShowPicker={setHabitShowPicker}
           showPicker={showPicker}
         />
 
@@ -182,7 +194,7 @@ const HabitDetailScreen: React.FC<Props> = ({ route, navigation }) => {
             Delete The Habit
           </Text>
         </TouchableOpacity>
-      </View>
+      </CenteredView>
     </ScrollView>
   )
 }

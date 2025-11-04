@@ -9,10 +9,8 @@ export const StatsService = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl : baseEndPoint,
     prepareHeaders: (headers, { getState }) => {
-      // Redux state içinden token al
       const token = (getState() as any)?.userSlice?.userSession?.token
 
-      // Eğer token varsa header’a ekle
       if (token) {
         headers.set('Authorization', `Bearer ${token}`)
       }

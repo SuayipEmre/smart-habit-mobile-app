@@ -3,10 +3,12 @@ import { configureStore } from '@reduxjs/toolkit'
 import UserSlice from '../features/user'
 import AuthService from '@/services/AuthService'
 import HabitService from '@/services/HabitService';
+import HabitSlice from '../features/habit'
 
 export const store = configureStore({
     reducer: {
         userSlice: UserSlice,
+        habitSlice : HabitSlice,
         [AuthService.reducerPath]: AuthService.reducer,
         [StatsService.reducerPath]: StatsService.reducer,
         [HabitService.reducerPath] : HabitService.reducer
