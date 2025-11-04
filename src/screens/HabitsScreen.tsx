@@ -5,6 +5,7 @@ import HabitCard from '@/components/HabitCard'
 import { AntDesign } from '@expo/vector-icons'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { HabitsNavigatorStackParamList } from '@/navigation/types'
+import { useCompleteHabit } from '@/hooks/useCompleteHabit'
 
 
 
@@ -22,31 +23,9 @@ type habits = {
 }
 const HabitsScreen = () => {
     const { data, isLoading, isError } = useGetUserHabitsQuery({})
-
-    console.log('HABITS : ', data);
-    
     const navigation = useNavigation<NavigationProp<HabitsNavigatorStackParamList>>()
-
-    const [sendCompleteHabitRequest, {
-        isError: completeHabitError,
-        isLoading: completeHabitLoading,
-        data: completeHabitData,
-        error
-    }] = useCompleteHabitMutation()
-
+    const{completeHabit} = useCompleteHabit()
     
-    const completeHabits = async (habitId: string) => {
-        try {
-          const res = await sendCompleteHabitRequest(habitId).unwrap();
-      
-          Alert.alert("SmartHabit", "The habit was successfully completed");
-        } catch (err: any) {
-          const message = err?.data?.message || "Something went wrong";
-          Alert.alert("SmartHabit", message);
-        }
-      };
-
-
     const renderHabits = () => {
         if (isLoading) return <ActivityIndicator />
         else if (isError) return <Text>An error occured</Text>
@@ -57,7 +36,7 @@ const HabitsScreen = () => {
                 renderItem={({ item }) => (
                     <HabitCard
                         {...item}
-                        onComplete={completeHabits}
+                        onComplete={completeHabit}
                         navigation={navigation}
                     />
                 )}

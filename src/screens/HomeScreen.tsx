@@ -8,6 +8,7 @@ import { useGetHabitsOfTodaysQuery } from '@/services/HabitService';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CenteredView from '@/components/layouts/CenteredView';
+import { useCompleteHabit } from '@/hooks/useCompleteHabit';
 const HomeScreen = () => {
   const {
     data: streakData,
@@ -31,6 +32,8 @@ const HomeScreen = () => {
   } = useGetHabitsOfTodaysQuery({})
 
   const user = useUserSession()
+  const{completeHabit} = useCompleteHabit()
+
 
   const renderStreakContent = () => {
     if (streakLoading) return <ActivityIndicator />
@@ -61,8 +64,11 @@ const HomeScreen = () => {
     title: string,
     description: string,
     frequency: string,
-    streak: number
+    streak: number,
+    isCompletedToday:boolean
   }
+  console.log('todayHabitData.data.habits : ', todayHabitData?.data?.habits);
+  
   const renderHabitsOfTodayContent = () => {
     if (todayHabitLoading) return <ActivityIndicator />
     else if (todayHabitError) return <Text>An error occured</Text>
@@ -78,7 +84,11 @@ const HomeScreen = () => {
                 <Text className="text-base font-semibold text-gray-900">{item.title}</Text>
                 <Text className="text-sm text-gray-500">{item.frequency} • streak {item.streak}</Text>
               </View>
-              <TouchableOpacity className="px-4 py-2 bg-indigo-500 rounded-xl">
+              <TouchableOpacity 
+              disabled={item.isCompletedToday}
+              className="px-4 py-2 bg-indigo-500 rounded-xl"
+              onPress={() => completeHabit(item._id)}
+              >
                 <Text className="text-sm font-semibold text-white">Complete</Text>
               </TouchableOpacity>
             </View>
