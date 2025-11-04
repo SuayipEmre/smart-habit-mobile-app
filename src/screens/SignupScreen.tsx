@@ -29,8 +29,9 @@ const SignupScreen = () => {
         }
         else {
             const userValues = {
-                ...data.user,
-                token: data.token
+                ...data.data.user,
+                accessToken: data.data.accessToken,
+                refreshToken : data.data.refreshToken
             }
             setUserSession(userValues)
             Alert.alert('Signup Successful', 'Your account has been created successfully.')

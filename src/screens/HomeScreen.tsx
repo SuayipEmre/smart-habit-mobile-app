@@ -31,6 +31,10 @@ const HomeScreen = () => {
     error: todayHabitError
   } = useGetHabitsOfTodaysQuery({})
 
+  console.log('streakError : ', streakError);
+  console.log('progressError : ', progressError);
+  
+  
   const user = useUserSession()
   const{completeHabit} = useCompleteHabit()
 

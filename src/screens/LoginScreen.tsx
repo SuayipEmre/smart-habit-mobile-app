@@ -26,14 +26,15 @@ const LoginScreen = () => {
     const [sendLoginRequest, { isError, isLoading }] = useSendSigninRequestMutation()
 
     const handleLogin = async () => {
-        const data  = await sendLoginRequest({ email, password })
-        if (data.error) {
+        const responseData  = await sendLoginRequest({ email, password })
+        if (responseData.error) {
             Alert.alert('Login Failed', 'Please check your credentials and try again.')
          }
         else {
             const userValues = {
-                ...data.data.user,
-                token : data.data.token
+                ...responseData.data.data.user,
+                accessToken : responseData.data.data.accessToken,
+                refreshToken :responseData.data.data.refreshToken
             } as UserSessionType
             setUserSession(userValues)
             await saveUserSessionToStorage(userValues)

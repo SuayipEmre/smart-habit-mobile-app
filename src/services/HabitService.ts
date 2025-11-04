@@ -1,27 +1,17 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { baseQueryWithReauth } from './BaseQuery';
 
-const baseEndPoint = `${process.env.EXPO_PUBLIC_API_URL}habit/`;
 
 export const HabitService = createApi({
   reducerPath: 'habitService',
-  baseQuery: fetchBaseQuery({
-    baseUrl: baseEndPoint,
-    prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as any)?.userSlice?.userSession?.token;
-      if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
-
+  baseQuery: baseQueryWithReauth,
   tagTypes: ['Habit'],
 
   endpoints: (builder) => ({
 
     getUserHabits: builder.query({
       query: () => ({
-        url: '/',
+        url: 'habit',
         method: 'GET',
       }),
       providesTags: ['Habit'],
@@ -29,7 +19,7 @@ export const HabitService = createApi({
 
     getHabitsOfTodays: builder.query({
       query: () => ({
-        url: 'today',
+        url: 'habit/today',
         method: 'GET',
       }),
       providesTags: ['Habit'],
@@ -37,7 +27,7 @@ export const HabitService = createApi({
 
     completeHabit: builder.mutation({
       query: (habitId: string) => ({
-        url: `complete/${habitId}`,
+        url: `habit/complete/${habitId}`,
         method: 'POST',
       }),
       invalidatesTags: ['Habit'], // ✅ success → cache invalidation
@@ -45,7 +35,7 @@ export const HabitService = createApi({
 
     createHabit: builder.mutation({
       query: (body) => ({
-        url: `create`,
+        url: `habit/create`,
         method: 'POST',
         body,
       }),
@@ -60,7 +50,7 @@ export const HabitService = createApi({
         remindertime: string | null,
         habitId: string,
       }) => ({
-        url: `update/${habitId}`,
+        url: `habit/update/${habitId}`,
         method: 'PUT',
         body: {
           title,
@@ -74,7 +64,7 @@ export const HabitService = createApi({
 
     deleteHabit: builder.mutation({
       query: (habitId : string) => ({
-        url: `delete/${habitId}`,
+        url: `habit/delete/${habitId}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Habit'],

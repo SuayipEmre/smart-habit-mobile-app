@@ -1,34 +1,21 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { baseQueryWithReauth } from './BaseQuery'
 
-
-
-const baseEndPoint = `${process.env.EXPO_PUBLIC_API_URL}stats/`
 
 export const StatsService = createApi({
   reducerPath: 'userService',
-  baseQuery: fetchBaseQuery({
-    baseUrl : baseEndPoint,
-    prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as any)?.userSlice?.userSession?.token
-
-      if (token) {
-        headers.set('Authorization', `Bearer ${token}`)
-      }
-
-      return headers
-    },
-  }),
+  baseQuery:baseQueryWithReauth,
   endpoints: (builder) => ({
     getUserStreakStat: builder.query({
       query: () => ({
-        url: 'streak',
+        url: 'stats/streak',
         method: 'GET',
       }),
     }),
 
     getUserProgressStat : builder.query({
       query : () => ({
-        url : 'progress',
+        url : 'stats/progress',
         method : 'GET'
       })
     })
