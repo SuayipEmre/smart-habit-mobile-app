@@ -31,9 +31,6 @@ const HomeScreen = () => {
     error: todayHabitError
   } = useGetHabitsOfTodaysQuery({})
 
-  console.log('streakError : ', streakError);
-  console.log('progressError : ', progressError);
-  
   
   const user = useUserSession()
   const{completeHabit} = useCompleteHabit()
@@ -71,7 +68,6 @@ const HomeScreen = () => {
     streak: number,
     isCompletedToday:boolean
   }
-  console.log('todayHabitData.data.habits : ', todayHabitData?.data?.habits);
   
   const renderHabitsOfTodayContent = () => {
     if (todayHabitLoading) return <ActivityIndicator />

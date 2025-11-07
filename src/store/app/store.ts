@@ -4,6 +4,7 @@ import UserSlice from '../features/user'
 import AuthService from '@/services/AuthService'
 import HabitService from '@/services/HabitService';
 import HabitSlice from '../features/habit'
+import { NotificationService } from '@/services/NotificationsService';
 
 export const store = configureStore({
     reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
         habitSlice : HabitSlice,
         [AuthService.reducerPath]: AuthService.reducer,
         [StatsService.reducerPath]: StatsService.reducer,
-        [HabitService.reducerPath] : HabitService.reducer
+        [HabitService.reducerPath] : HabitService.reducer,
+        [NotificationService.reducerPath] : NotificationService.reducer,
 
 
     },
@@ -21,6 +23,7 @@ export const store = configureStore({
                 .concat(AuthService.middleware)
                 .concat(StatsService.middleware)
                 .concat(HabitService.middleware)
+                .concat(NotificationService.middleware)
             )
     }
 })

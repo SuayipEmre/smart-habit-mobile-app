@@ -16,6 +16,9 @@ import { getUserSessionFromStorage } from '@/utils/asyncStorage/userSessions';
 import { UserSessionType } from '@/types/UserSessionType';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import HabitsStack from './HabitsStack';
+import { useUpdateExpoPushTokenMutation } from '@/services/NotificationsService';
+import { registerForPushNotificationsAsync } from '@/services/PushNotification';
+import * as Notifications from "expo-notifications";
 
 type NativeStackNavigatorParamList = {
     AuthenticationNavigator: NavigatorScreenParams<AuthNavigatorStackParamList>;
@@ -24,69 +27,98 @@ type NativeStackNavigatorParamList = {
 
 const Tab = createBottomTabNavigator<BottomNavigatorRootStackParamList>()
 const Stack = createNativeStackNavigator<NativeStackNavigatorParamList>()
-
 type BottomNavigatorRootStackParamList = {
     MainNavigator: NavigatorScreenParams<MainNavigatorStackParamList>;
-    HabitsNavigator : NavigatorScreenParams<HabitsNavigatorStackParamList>
-    ProfileNavigator : NavigatorScreenParams<ProfileNavigatorStackParamList>
+    HabitsNavigator: NavigatorScreenParams<HabitsNavigatorStackParamList>
+    ProfileNavigator: NavigatorScreenParams<ProfileNavigatorStackParamList>
 }
 const RootNavigator = () => {
     const userSession = useUserSession()
 
+    const [updateExpoPushToken] = useUpdateExpoPushTokenMutation();
 
     useEffect(() => {
-      const getUserSession = async () => {
-        const userSession = await getUserSessionFromStorage()
-        setUserSession(userSession as UserSessionType)
-      }
+        const getUserSession = async () => {
+            const userSession = await getUserSessionFromStorage()
+            setUserSession(userSession as UserSessionType)
+        }
 
         getUserSession()
-    },[])
+    }, [])
+
+
+    console.log("User Session in RootNavigator:", userSession);
+
+
+    useEffect(() => {
+        const setupPush = async () => {
+
+            if (!userSession?.accessToken) return;
+            
+            const expoToken = await registerForPushNotificationsAsync();
+
+            if (expoToken) {
+                try {
+                const data = await updateExpoPushToken(expoToken).unwrap();
+                console.log('data : ', data);
+                
+                    
+                } catch (error) {
+                    console.log('error : ', error)
+                }
+            }
+
+            // App açıkken bildirimi yakala
+            
+        };
+
+        setupPush();
+    }, [userSession])
 
     if (userSession) return (
         <NavigationContainer>
             <Tab.Navigator
-            screenOptions={{
-                tabBarActiveTintColor : '#00000',
-                tabBarInactiveTintColor : '#808080',
-            }}
+                screenOptions={{
+                    tabBarActiveTintColor: '#00000',
+                    tabBarInactiveTintColor: '#808080',
+                }}
 
-            
+
             >
                 <Tab.Screen
                     name="MainNavigator"
                     component={MainStack}
                     options={{
-                        tabBarLabel : '',
-                        headerShown:false,
+                        tabBarLabel: '',
+                        headerShown: false,
                         tabBarIcon: ({ focused, color }) => (
                             <Entypo name="home" color={color} size={25} />
                         ),
                     }}
                 />
 
-                <Tab.Screen 
-                name='HabitsNavigator'
-                component={HabitsStack}
-                options={{
-                    tabBarLabel : '',
-                    tabBarIcon : ({focused, color}) => (
-                        <AntDesign name="unordered-list" size={24} color={color} />
-                    ),
-                    headerTitle : 'Your Habits',
-                    headerShown:false
-                }}
+                <Tab.Screen
+                    name='HabitsNavigator'
+                    component={HabitsStack}
+                    options={{
+                        tabBarLabel: '',
+                        tabBarIcon: ({ focused, color }) => (
+                            <AntDesign name="unordered-list" size={24} color={color} />
+                        ),
+                        headerTitle: 'Your Habits',
+                        headerShown: false
+                    }}
                 />
 
                 <Tab.Screen
-                name='ProfileNavigator'
-                component={ProfileStack}
-                options={{
-                    tabBarLabel : '',
-                    tabBarIcon: ({ focused, color}) => (
-                        <Feather name="user" size={24} color={color} />
-                    ),
-                }}
+                    name='ProfileNavigator'
+                    component={ProfileStack}
+                    options={{
+                        tabBarLabel: '',
+                        tabBarIcon: ({ focused, color }) => (
+                            <Feather name="user" size={24} color={color} />
+                        ),
+                    }}
                 />
             </Tab.Navigator>
         </NavigationContainer>

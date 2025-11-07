@@ -47,7 +47,6 @@ const CreateHabitScreen = () => {
             reminderTime: formattedTime,
         };
 
-        console.log("reminder time", values.reminderTime);
 
         try {
             await sendCreateHabitReq(values).unwrap();
@@ -57,7 +56,6 @@ const CreateHabitScreen = () => {
             setHabitReminderTime(null);
             Alert.alert("SmartHabit", "Habit was successfully created");
         } catch (error) {
-            console.log("error", error);
             Alert.alert("SmartHabit", (error as any)?.data?.message || "Something went wrong");
         }
     };

@@ -50,7 +50,6 @@ const HabitCard: React.FC<HabitType> = ({
     updatedAt
   }
 
-  console.log('habit : ', habit);
   
   // animasyon state
   const progress = useSharedValue(isCompletedToday ? 1 : 0)

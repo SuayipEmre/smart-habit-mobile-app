@@ -21,7 +21,7 @@ It helps users **create, track, and maintain daily habits** through reminders an
 | **React Native (Expo Bare)** | Mobile app framework |
 | **Redux Toolkit & RTK Query** | State and API management |
 | **NativeWind (Tailwind)** | Styling framework |
-| **React Navigation** | Navigation system (stack, tabs, drawers) |
+| **React Navigation** | Navigation system (stack, tabs) |
 | **AsyncStorage** | Local storage |
 | **TypeScript** | Strongly typed JavaScript |
 | **Backend** | SmartHabit Node.js + Express API |
